@@ -3,6 +3,9 @@
 ifneq ($(filter Msys Cygwin, $(shell uname -o)), )
     PLATFORM := WIN32
     TYRIAN_DIR = C:\\TYRIAN
+else ifeq ($(shell uname -s), Darwin)
+    PLATFORM := MACOS
+    TYRIAN_DIR = /usr/local/share/tyrian
 else
     PLATFORM := UNIX
     TYRIAN_DIR = $(gamesdir)/tyrian
@@ -149,6 +152,10 @@ clean :
 	rm -f $(OBJS)
 	rm -f $(DEPS)
 	rm -f $(TARGET)
+
+.PHONY : install-deps-macos
+install-deps-macos :
+	brew install sdl2 sdl2_net
 
 $(TARGET) : $(OBJS)
 	$(CC) $(ALL_CFLAGS) $(ALL_LDFLAGS) -o $@ $^ $(ALL_LDLIBS)
